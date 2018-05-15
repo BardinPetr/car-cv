@@ -19,7 +19,7 @@ for d, dirs, files in os.walk("res"):
         signs[file_name.replace('.png', '')] = file
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_address = ('', 1090)
+server_address = ('', 1092)
 s.bind(server_address)
 s.listen(1)
 conn, addr = s.accept()
@@ -42,10 +42,10 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN:
-                speed = 1590
+                speed = 1580
                 check(speed, route)
             if event.key == pygame.K_UP:
-                speed = 1380
+                speed = 1390
                 check(speed, route)
             if event.key == pygame.K_LEFT:
                 route = 100
