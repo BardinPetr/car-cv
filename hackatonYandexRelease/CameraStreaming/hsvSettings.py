@@ -1,7 +1,8 @@
 import cv2 as cv
 import numpy as np
 
-cap = cv.VideoCapture(1)
+#cap = cv.VideoCapture(1)
+cap = cv.VideoCapture("./../output.avi")
 
 
 def nothing(x):
@@ -19,13 +20,18 @@ cv.createTrackbar('h', 'result', 0, 255, nothing)
 cv.createTrackbar('s', 'result', 0, 255, nothing)
 cv.createTrackbar('v', 'result', 0, 255, nothing)
 
-cv.createTrackbar('mh', 'result', 0, 255, nothing)
-cv.createTrackbar('ms', 'result', 0, 255, nothing)
-cv.createTrackbar('mv', 'result', 0, 255, nothing)
+cv.createTrackbar('mh', 'result', 255, 255, nothing)
+cv.createTrackbar('ms', 'result', 255, 255, nothing)
+cv.createTrackbar('mv', 'result', 255, 255, nothing)
 
+#_, frame = cap.read()
+i = 0
 while (1):
-
-    _, frame = cap.read()
+    frame = cv.resize(cv.imread("./../9.png"), (600, 400))
+    i += 1
+    if i % 3 == 0:
+        i = 0
+        #_, frame = cap.read()
 
     # converting to HSV
     hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)

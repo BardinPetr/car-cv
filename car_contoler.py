@@ -37,47 +37,52 @@ screen.fill(pygame.Color("black"))
 running = True
 
 while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_DOWN:
-                speed = 1580
-                check(speed, route)
-            if event.key == pygame.K_UP:
-                speed = 1390
-                check(speed, route)
-            if event.key == pygame.K_LEFT:
-                route = 100
-                check(speed, route)
-            if event.key == pygame.K_RIGHT:
-                route = 80
-                check(speed, route)
+    try:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_DOWN:
+                    speed = 1580
+                    check(speed, route)
+                if event.key == pygame.K_UP:
+                    speed = 1390
+                    check(speed, route)
+                if event.key == pygame.K_LEFT:
+                    route = 100
+                    check(speed, route)
+                if event.key == pygame.K_RIGHT:
+                    route = 80
+                    check(speed, route)
 
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_DOWN:
-                speed = 1500
-                check(speed, route)
-            if event.key == pygame.K_UP:
-                speed = 1500
-                check(speed, route)
-            if event.key == pygame.K_LEFT:
-                route = 90
-                check(speed, route)
-            if event.key == pygame.K_RIGHT:
-                route = 90
-                check(speed, route)
-    screen.fill((0, 0, 0))
-    packet = conn.recv(1024)
-    if packet:
-        files = packet.decode("utf-8").split(",")
-        length = len(files)
-        k = 0
-        for file_name in files:
-            screen.blit(signs[file_name], (k * 100, 0))
-            k += 1
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_DOWN:
+                    speed = 1500
+                    check(speed, route)
+                if event.key == pygame.K_UP:
+                    speed = 1500
+                    check(speed, route)
+                if event.key == pygame.K_LEFT:
+                    route = 90
+                    check(speed, route)
+                if event.key == pygame.K_RIGHT:
+                    route = 90
+                    check(speed, route)
+        screen.fill((0, 0, 0))
+        packet = conn.recv(1024)
+        if packet:
+            files = packet.decode("utf-8").split(",")
+            length = len(files)
+            k = 0
+            for file_name in files:
+                screen.blit(signs[file_name], (k * 100, 0))
+                k += 1
 
-    pygame.display.flip()
+        pygame.display.flip()
+    except KeyboardInterrupt:
+        break
+    except Exception:
+        pass
 check(1500, 90, "00")
 conn.close()
 pygame.quit()
