@@ -1,18 +1,18 @@
 import numpy as np
 import cv2 as cv
 
-cap = cv.VideoCapture(0)
+cap = cv.VideoCapture(1)
 
 signs = {
-    #"no_drive": [[0, 173, 0], [60, 255, 255]],  # [[119, 101, 73], [255, 255, 255]],
-    #"stop": [[0, 173, 0], [60, 255, 255]],
-    #"a_unevenness": [[0, 173, 0], [60, 255, 255]],
-    "main_road": [[0, 115, 96], [29, 161, 189]],
-    #"no_entry": [[0, 173, 0], [60, 255, 255]],
-    "parking": [[97, 107, 130], [145, 255, 255]],
-    "pedistrain": [[107, 183, 92], [153, 135, 122]],
-    "road_works": [[26, 79, 132], [46, 174, 255]]
-    #"way_out": [[0, 173, 0], [60, 255, 255]]
+    "no_drive": [[0, 173, 0], [60, 255, 255]],  # [[119, 101, 73], [255, 255, 255]],
+    "stop": [[0, 173, 0], [60, 255, 255]],
+    "a_unevenness": [[0, 173, 0], [60, 255, 255]],
+    "main_road": [[14, 111, 174], [52, 255, 255]],
+    "no_entry": [[0, 173, 0], [60, 255, 255]],
+    "parking": [[40, 70, 122], [255, 233, 250]],
+    "pedistrain": [[40, 70, 122], [255, 233, 250]],
+    "road_works": [[0, 173, 0], [60, 255, 255]],
+    "way_out": [[0, 173, 0], [60, 255, 255]]
 }
 '''
 def get_colors(x):
@@ -22,11 +22,11 @@ def get_colors(x):
         'yellow': 0,
         'black': 0
     }
-    
+
 '''
 for i, j in signs.items():
     a = cv.resize(cv.imread("./signs/{}.png".format(i)), (100, 100))
-    signs[i] = (j[0], j[1], a)
+    signs[i] = ([], a)
 
 
 def dist(h0, h1):
@@ -34,7 +34,6 @@ def dist(h0, h1):
 
 
 while True:
-    result = set()
     ret, frame = cap.read()
     hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
 
@@ -75,10 +74,9 @@ while True:
                         if xresizedRoi[i][j] == xnoDrive[i][j]:
                             identity_percent = identity_percent + 1
                 pc = identity_percent / 10000 * 100
-                if 60 < pc < 101:
-                    cv.drawContours(frame, [box], -1, (0, 0, 255), 3)
-                    cv.putText(frame, s, (box[0][0], box[0][1]), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-                    result.add(s)
+                print(pc, s)
+                if 60 < pc < 98:
+                    cv.drawContours(frame, [box], -1, (0 if s == 'stop' else 255, 255, 0), 3)
                 # cv.imshow("test", frame)
                 # cv.imshow('roiImg', roiImg)
                 # print(identity_percent)
@@ -87,7 +85,5 @@ while True:
 
     if cv.waitKey(1) & 0xFF == ord('q'):
         break
-
-    print(result)
 cap.release()
 cv.destroyAllWindows()
