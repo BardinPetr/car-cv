@@ -16,8 +16,7 @@ for d, dirs, files in os.walk("res"):
     for file_name in files:
         file = pygame.image.load("res/" + file_name)
         file = pygame.transform.scale(file, (100, 100))
-        signs[file_name] = file
-
+        signs[file_name.replace('.png', '')] = file
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('', 1090)
@@ -68,6 +67,7 @@ while running:
             if event.key == pygame.K_RIGHT:
                 route = 90
                 check(speed, route)
+    screen.fill((0, 0, 0))
     packet = conn.recv(1024)
     if packet:
         files = packet.decode("utf-8").split(",")

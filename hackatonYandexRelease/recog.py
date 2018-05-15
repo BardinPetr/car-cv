@@ -1,18 +1,19 @@
 import numpy as np
 import cv2 as cv
+import socket
 
 cap = cv.VideoCapture(0)
 
 signs = {
-    #"no_drive": [[0, 173, 0], [60, 255, 255]],  # [[119, 101, 73], [255, 255, 255]],
-    #"stop": [[0, 173, 0], [60, 255, 255]],
-    #"a_unevenness": [[0, 173, 0], [60, 255, 255]],
+    # "no_drive": [[0, 173, 0], [60, 255, 255]],  # [[119, 101, 73], [255, 255, 255]],
+    # "stop": [[0, 173, 0], [60, 255, 255]],
+    # "a_unevenness": [[0, 173, 0], [60, 255, 255]],
     "main_road": [[0, 115, 96], [29, 161, 189]],
-    #"no_entry": [[0, 173, 0], [60, 255, 255]],
+    # "no_entry": [[0, 173, 0], [60, 255, 255]],
     "parking": [[97, 107, 130], [145, 255, 255]],
     "pedistrain": [[107, 183, 92], [153, 135, 122]],
     "road_works": [[26, 79, 132], [46, 174, 255]]
-    #"way_out": [[0, 173, 0], [60, 255, 255]]
+    # "way_out": [[0, 173, 0], [60, 255, 255]]
 }
 '''
 def get_colors(x):
@@ -32,6 +33,9 @@ for i, j in signs.items():
 def dist(h0, h1):
     return min(abs(h1 - h0), 360 - abs(h1 - h0))
 
+
+sk = socket.socket()
+sk.connect(('localhost', 1090))
 
 while True:
     result = set()
@@ -88,6 +92,8 @@ while True:
     if cv.waitKey(1) & 0xFF == ord('q'):
         break
 
-    print(result)
+    sk.send(','.join(list(result)).encode('utf-8'))
+
+sk.close()
 cap.release()
 cv.destroyAllWindows()
